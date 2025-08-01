@@ -1,0 +1,99 @@
+from re import A
+from core.schemas.input_model import ArrayBaseOperationInputModel, ArraySortingInputModel
+from core.schemas.output_model import AlgorithmsOutputModel, ArrayOutputModel, ArraySortingStepOutputModel, TypeOfOperation
+from fastapi import APIRouter, HTTPException
+from fastapi import status
+import numpy as np
+
+DATA_TAGS = ["Arrays"]
+DATA_URL = "arrays"
+
+router = APIRouter(prefix="/" + DATA_URL, tags=DATA_TAGS)
+
+array = list(np.random.randint(100, size=5))
+
+# Getter
+@router.get("/get_all_algorithms", response_model=AlgorithmsOutputModel)
+async def get_all_algorithms():
+    return AlgorithmsOutputModel(algorithms=["Bubble Sort", "Quick Sort", "Merge Sort", "Insertion Sort", "Selection Sort"])
+
+@router.post("/get_array",response_model=ArrayOutputModel)
+async def get_array():
+    return ArrayOutputModel(array=array)
+
+@router.post("/add_element", response_model=ArrayOutputModel)
+async def add_element(field: ArrayBaseOperationInputModel):
+    if field.element is None:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The element passed can't be null")
+    array.append(field.element)
+    return ArrayOutputModel(array=array)
+
+@router.post("/remove_element", response_model=ArrayOutputModel)
+async def remove_element(field: ArrayBaseOperationInputModel):
+    if field.element is None or field.element not in array:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The operation cannot be completed")
+    array.remove(field.element)
+    return ArrayOutputModel(array=array)
+
+# Algorithms
+@router.get("/insertion_sort")
+async def insertion_sort(field: ArraySortingInputModel):
+    ...
+    
+
+@router.get("/selection_sort")
+async def selection_sort():
+    if not array:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The array passed can't be null")
+    steps= []
+    n=len(array)
+    for i in range(n):
+        min_idx = i
+        
+        for j in range(i + 1, n):
+            
+            steps.append(ArraySortingStepOutputModel(
+                current_array= array,
+                min_found=min_idx,
+                fix_value=i,
+                current_value=j,
+                type_of_operation =TypeOfOperation.COMPARISON,
+                ordered_index=i
+            ))
+            if array[j] < array[min_idx]:
+                min_idx = j
+                steps.append(ArraySortingStepOutputModel(
+                    current_array= array,
+                    min_found=min_idx,
+                    fix_value=i,
+                    current_value=j,
+                    type_of_operation =TypeOfOperation.SUCCESS_COMPARISON,
+                    ordered_index=i
+                ))
+        
+        array[i], array[min_idx] = array[min_idx], array[i]
+        steps.append(
+            ArraySortingStepOutputModel(
+                current_array= array,
+                min_found=min_idx,
+                fix_value=i,
+                current_value=j,
+                type_of_operation =TypeOfOperation.SWAP,
+                ordered_index=i
+        ))
+
+    
+    return steps
+
+@router.get("/bubble_sort")
+async def bubble_sort():
+    ...
+
+@router.get("/merge_sort")
+async def merge_sort():
+    ...
+
+@router.get("/quick_sort")
+async def quick_sort():
+    ...
+
