@@ -1,9 +1,18 @@
-from re import A
 from core.schemas.input_model import ArrayBaseOperationInputModel, ArraySortingInputModel
 from core.schemas.output_model import AlgorithmsOutputModel, ArrayOutputModel, ArraySortingStepOutputModel, TypeOfOperation
 from fastapi import APIRouter, HTTPException
 from fastapi import status
 import numpy as np
+
+import logging
+
+# Basic logging config
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 DATA_TAGS = ["Arrays"]
 DATA_URL = "arrays"
@@ -15,6 +24,7 @@ array = list(np.random.randint(100, size=5))
 # Getter
 @router.get("/get_all_algorithms", response_model=AlgorithmsOutputModel)
 async def get_all_algorithms():
+    logger.info("GET /get_all_algorithms called")
     return AlgorithmsOutputModel(algorithms=["Bubble Sort", "Quick Sort", "Merge Sort", "Insertion Sort", "Selection Sort"])
 
 @router.post("/get_array",response_model=ArrayOutputModel)
