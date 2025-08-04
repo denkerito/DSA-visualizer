@@ -4,9 +4,11 @@ import { useState } from "react"
 
 interface AlgoChoserProps {
     algorithms: string[];
+    setChooseAlgo: (algo: string) => void
 }
 
-function AlgoChoser({algorithms = ["no found"]} : AlgoChoserProps) {
+
+function AlgoChoser({algorithms = ["no found"], setChooseAlgo} : AlgoChoserProps) {
     const [selectedIndex, setSelectedIndex] = useState(-1)
 
     return (
@@ -15,13 +17,12 @@ function AlgoChoser({algorithms = ["no found"]} : AlgoChoserProps) {
                 <h1 className="text-white "> Choose your algorithms</h1>
             </div>
             <div className="w-full h-[85%] text-white mt-[1.5rem]">
-                <ul className="list-image-none flex flex-col items-center justify-center ">
+                <ul className="list-image-none ">
                     {algorithms.map((name, index) =>
                         <li key={name}
-                         className={ 
-                            selectedIndex === index ? "bg-gray-800" : "bg-black"}
+                         className={`${selectedIndex === index ? "bg-gray-800" : "bg-black"} cursor-pointer flex flex-col items-center justify-center`}
                         
-                         onClick={() => setSelectedIndex(index)}> {name}</li>
+                         onClick={() => { setSelectedIndex(index); setChooseAlgo(name); } }> {name}</li>
                     )}
                 </ul>
             </div>

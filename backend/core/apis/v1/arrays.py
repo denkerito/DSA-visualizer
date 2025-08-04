@@ -1,5 +1,5 @@
 from core.schemas.input_model import ArrayBaseOperationInputModel, ArraySortingInputModel
-from core.schemas.output_model import AlgorithmsOutputModel, ArrayOutputModel, ArraySortingStepOutputModel, TypeOfOperation
+from core.schemas.output_model import AlgorithmsOutputModel, ArrayOutputModel, BubbleSortStepOutputModel, SelectionSortStepOutputModel, TypeOfOperation
 from fastapi import APIRouter, HTTPException
 from fastapi import status
 import numpy as np
@@ -27,7 +27,7 @@ async def get_all_algorithms():
     logger.info("GET /get_all_algorithms called")
     return AlgorithmsOutputModel(algorithms=["Bubble Sort", "Quick Sort", "Merge Sort", "Insertion Sort", "Selection Sort"])
 
-@router.post("/get_array",response_model=ArrayOutputModel)
+@router.get("/get_array",response_model=ArrayOutputModel)
 async def get_array():
     return ArrayOutputModel(array=array)
 
@@ -62,32 +62,29 @@ async def selection_sort():
         
         for j in range(i + 1, n):
             
-            steps.append(ArraySortingStepOutputModel(
+            steps.append(SelectionSortStepOutputModel(
                 current_array= array,
-                min_found=min_idx,
-                fix_value=i,
-                current_value=j,
+                min_index=min_idx,
+                current_index=j,
                 type_of_operation =TypeOfOperation.COMPARISON,
                 ordered_index=i
             ))
             if array[j] < array[min_idx]:
                 min_idx = j
-                steps.append(ArraySortingStepOutputModel(
+                steps.append(SelectionSortStepOutputModel(
                     current_array= array,
-                    min_found=min_idx,
-                    fix_value=i,
-                    current_value=j,
+                    min_index=min_idx,
+                    current_index=j,
                     type_of_operation =TypeOfOperation.SUCCESS_COMPARISON,
                     ordered_index=i
                 ))
         
         array[i], array[min_idx] = array[min_idx], array[i]
         steps.append(
-            ArraySortingStepOutputModel(
+            SelectionSortStepOutputModel(
                 current_array= array,
-                min_found=min_idx,
-                fix_value=i,
-                current_value=j,
+                min_index=min_idx,
+                current_index=j,
                 type_of_operation =TypeOfOperation.SWAP,
                 ordered_index=i
         ))
@@ -99,34 +96,30 @@ async def bubble_sort():
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The array passed can't be null")
     steps= []
     n = len(array)
-    
     for i in range(n):
         swapped = False
 
         for j in range(0, n-i-1):
-            steps.append(ArraySortingStepOutputModel(
+            steps.append(BubbleSortStepOutputModel(
                 current_array= array,
-                min_found= -1,   # min_found is not applicable here
-                fix_value= j + 1,  # fix_value in this context is the next index to compare (maybe we can change this later or use a different model)
+                next_index = j + 1,  # fix_value in this context is the next index to compare (maybe we can change this later or use a different model)
                 current_value=j,
                 type_of_operation =TypeOfOperation.COMPARISON,
                 ordered_index= n - i
             ))
             if array[j] > array[j+1]:
-                steps.append(ArraySortingStepOutputModel(
+                steps.append(BubbleSortStepOutputModel(
                     current_array= array,
-                    min_found= -1,
-                    fix_value= j + 1,
+                    next_index = j + 1,
                     current_value=j,
                     type_of_operation =TypeOfOperation.SUCCESS_COMPARISON,
                     ordered_index= n - i
                 ))
                 array[j], array[j+1] = array[j+1], array[j]
                 swapped = True
-                steps.append(ArraySortingStepOutputModel(
+                steps.append(BubbleSortStepOutputModel(
                     current_array= array,
-                    min_found= -1,
-                    fix_value= j + 1,
+                    next_index = j + 1,
                     current_value = j,
                     type_of_operation = TypeOfOperation.SWAP,
                     ordered_index= n - i

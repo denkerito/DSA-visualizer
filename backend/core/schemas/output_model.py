@@ -14,11 +14,17 @@ class AlgorithmsOutputModel(BaseModel):
 class ArrayOutputModel(BaseModel):
     array: List[int]
 
-class ArraySortingStepOutputModel(BaseModel):
+class ArraySortingStepBaseOutputModel(BaseModel):
     current_array: List[int]
-    min_found: int
-    fix_value: int
-    current_value: int
+    current_index: int
     type_of_operation: TypeOfOperation
+
+
+class SelectionSortStepOutputModel(ArraySortingStepBaseOutputModel):
+    min_index: int
     ordered_index: int
 
+
+class BubbleSortStepOutputModel(ArraySortingStepBaseOutputModel):
+    next_index: int
+    ordered_index: int
