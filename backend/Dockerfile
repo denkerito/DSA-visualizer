@@ -11,10 +11,10 @@ RUN pip install poetry && \
     poetry install --no-root --no-interaction --no-ansi
 
 # Copia tutto il codice sorgente sarebbe COPY <source> <destination> 
-# quindi primo punto: rappresenta backend/core , secondo rappresenta /app nel container
-COPY core ./core
+# quindi primo punto: rappresenta backend , secondo rappresenta /app nel container
+COPY . .
 
-WORKDIR /app/core
+WORKDIR /app
 
 # Comando di default per avviare l'app
-CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--reload"]
+CMD ["poetry", "run", "uvicorn", "core.main:app", "--host", "0.0.0.0", "--reload"]

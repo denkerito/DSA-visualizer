@@ -1,3 +1,4 @@
+# Docker
 .PHONY: start
 start:
 	@echo "🚀 Starting API and Frontend with Docker Compose..."
@@ -26,3 +27,11 @@ logs:
 .PHONY: restart
 restart: stop build start
 
+
+.PHONY: start-local-api
+start-local-api:
+	@cd backend/core && poetry run uvicorn main:app --reload
+
+.PHONY: start-local-frontend
+start-local-frontend:
+	@cd visualizer_fe && npm run dev

@@ -1,11 +1,11 @@
-# Ignora la cartella .git (controllo versione)
+# Controllo versione
 .git
 
-# Ignora file di configurazione locali dell’IDE (es. VSCode, IntelliJ)
+# IDE
 .vscode
 .idea
 
-# Ignora file temporanei, cache, build locali
+# Python
 __pycache__
 *.pyc
 *.pyo
@@ -14,24 +14,20 @@ __pycache__
 *.egg-info/
 dist/
 build/
-
-# Ignora file di log
-*.log
-
-# Ignora ambiente virtuale Python
 .venv
 venv/
 
-# Ignora cartelle di dipendenze locali (es. node_modules)
+# Node.js
 node_modules/
 
-# Ignora file o cartelle di sistema (es. DS_Store su macOS)
+# Log e sistema
+*.log
 .DS_Store
 
-# Ignora file dockerignore stesso (opzionale)
-.dockerignore
-
-# Ignora altri file o cartelle temporanee o non necessarie
+# Env e config
 *.env
 .env.local
 .env.*.local
+
+# Ignora file dockerignore stesso (opzionale)
+.dockerignore

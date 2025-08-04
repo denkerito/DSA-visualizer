@@ -1,15 +1,14 @@
-FROM node:18-slim
+FROM node:20-slim
 
 WORKDIR /app
 
-# Copia i file di dipendenze
 COPY package.json package-lock.json ./
 
-# Pulizia della cache di moduli vecchi, ma lascia il lock file!
-RUN rm -rf node_modules && npm install
+# Elimina prima eventuali vecchie dipendenze e lockfile (pulizia)
+RUN rm -rf node_modules package-lock.json || true
 
-# Copia il resto del codice
+RUN npm install
+
 COPY . .
 
-# Comando per avviare React (Vite)
 CMD ["npm", "run", "dev"]
