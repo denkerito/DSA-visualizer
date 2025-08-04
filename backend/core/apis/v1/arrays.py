@@ -91,13 +91,52 @@ async def selection_sort():
                 type_of_operation =TypeOfOperation.SWAP,
                 ordered_index=i
         ))
-
-    
     return steps
 
 @router.get("/bubble_sort")
 async def bubble_sort():
-    ...
+    if not array:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The array passed can't be null")
+    steps= []
+    n = len(array)
+    
+    for i in range(n):
+        swapped = False
+
+        for j in range(0, n-i-1):
+            steps.append(ArraySortingStepOutputModel(
+                current_array= array,
+                min_found= -1,   # min_found is not applicable here
+                fix_value= j + 1,  # fix_value in this context is the next index to compare (maybe we can change this later or use a different model)
+                current_value=j,
+                type_of_operation =TypeOfOperation.COMPARISON,
+                ordered_index= n - i
+            ))
+            if array[j] > array[j+1]:
+                steps.append(ArraySortingStepOutputModel(
+                    current_array= array,
+                    min_found= -1,
+                    fix_value= j + 1,
+                    current_value=j,
+                    type_of_operation =TypeOfOperation.SUCCESS_COMPARISON,
+                    ordered_index= n - i
+                ))
+                array[j], array[j+1] = array[j+1], array[j]
+                swapped = True
+                steps.append(ArraySortingStepOutputModel(
+                    current_array= array,
+                    min_found= -1,
+                    fix_value= j + 1,
+                    current_value = j,
+                    type_of_operation = TypeOfOperation.SWAP,
+                    ordered_index= n - i
+                ))
+        # No swaps means the array is sorted        
+        if (swapped == False):
+            break
+    # We can possibly add a final step to indicate the array is sorted TypeOfOperation.sorted, or just manage it in the frontendz
+    return steps        
+        
 
 @router.get("/merge_sort")
 async def merge_sort():
