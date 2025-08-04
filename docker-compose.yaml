@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    command: poetry run uvicorn main:app --host 0.0.0.0 --reload
+
+  frontend:
+    build:
+      context: ./visualizer_fe
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./visualizer_fe:/app
+    command: npm run dev

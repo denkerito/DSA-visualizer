@@ -31,13 +31,6 @@ function ArrayPage() {
   
   const [chooseAlgo, setChooseAlgo] = useState('');
   
-
-  const [steps, setSteps] = useState<Step[]>([])
-  const [currentStepIndex, setCurrentStepIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
-
- 
-
   return (
     <div className="w-full min-h-screen bg-gray-950 ">
       <div className="p-10 h-screen flex flex-row space-x-12">
@@ -47,7 +40,6 @@ function ArrayPage() {
               <Square 
                 key = {index} 
                 value = {value}
-                color = {}
               />
             ))}
           </div>  
