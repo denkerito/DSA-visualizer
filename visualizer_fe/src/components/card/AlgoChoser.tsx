@@ -22,7 +22,7 @@ function AlgoChoser({algorithms = ["no found"], setChooseAlgo} : AlgoChoserProps
                         <li key={name}
                          className={`${selectedIndex === index ? "bg-gray-800" : "bg-black"} cursor-pointer flex flex-col items-center justify-center`}
                         
-                         onClick={() => { setSelectedIndex(index); setChooseAlgo(name); } }> {name}</li>
+                         onClick={() => { setSelectedIndex(index); setChooseAlgo("selection_sort"); } }> {name}</li>
                     )}
                 </ul>
             </div>

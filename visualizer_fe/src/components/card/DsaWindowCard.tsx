@@ -4,9 +4,10 @@ import { Zap } from 'lucide-react';
 interface DsaWindowCardProps{
     children: ReactNode;
     chosen : boolean;
+    onStart: () => void
 }
 
-function DsaWindowCard({children, chosen = false}: DsaWindowCardProps){
+function DsaWindowCard({children, chosen = false, onStart}: DsaWindowCardProps){
     /*
     const runVisualization = (chosenAlgo: string) => {
         super.runVisualization();
@@ -24,7 +25,7 @@ function DsaWindowCard({children, chosen = false}: DsaWindowCardProps){
                 className={`group relative px-8 py-4 bg-purple-600 text-white font-semibold rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 ${
                     chosen ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
-                /*onClick = {() => {runVisualization(chosen)} } */
+                onClick = {onStart}
                 
             >
                 <div className="relative z-10 flex items-center">

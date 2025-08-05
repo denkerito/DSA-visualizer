@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class TypeOfOperation(Enum):
     COMPARISON = "comparison"
-    SUCCESS_COMPARISON= "success_comparison"
+    SUCCESS_COMPARISON= "successComparison"
     SWAP = "swap"
 
 
