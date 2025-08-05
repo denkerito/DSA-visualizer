@@ -53,36 +53,37 @@ async def insertion_sort(field: ArraySortingInputModel):
 
 @router.get("/selection_sort")
 async def selection_sort():
-    if not array:
+    array_copy= array.copy()
+    if not array_copy:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The array passed can't be null")
     steps= []
-    n=len(array)
+    n=len(array_copy)
     for i in range(n):
         min_idx = i
         
         for j in range(i + 1, n):
             
             steps.append(SelectionSortStepOutputModel(
-                current_array= array,
+                current_array= array_copy,
                 min_index=min_idx,
                 current_index=j,
                 type_of_operation =TypeOfOperation.COMPARISON,
                 ordered_index=i
             ))
-            if array[j] < array[min_idx]:
+            if array_copy[j] < array_copy[min_idx]:
                 min_idx = j
                 steps.append(SelectionSortStepOutputModel(
-                    current_array= array,
+                    current_array= array_copy,
                     min_index=min_idx,
                     current_index=j,
                     type_of_operation =TypeOfOperation.SUCCESS_COMPARISON,
                     ordered_index=i
                 ))
         
-        array[i], array[min_idx] = array[min_idx], array[i]
+        array_copy[i], array_copy[min_idx] = array_copy[min_idx], array_copy[i]
         steps.append(
             SelectionSortStepOutputModel(
-                current_array= array,
+                current_array= array_copy,
                 min_index=min_idx,
                 current_index=j,
                 type_of_operation =TypeOfOperation.SWAP,
