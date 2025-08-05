@@ -23,29 +23,29 @@ function ArrayPage() {
   const [isPlaying, setIsPlaying] = useState(false)
 
 
-  const startVisualization = () => {
-    const response = useApiCall({
-          endpoint: 'arrays/'+chooseAlgo,
-          method: 'GET'
-    }) as ApiResponse<SelectionSortStep[]>;
-    if (response.error){
-      return;
+  const startVisualization = async () => {
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/v1/arrays/${chooseAlgo}`)
+      const response = await res.json()
+      
+      setSteps(response as SelectionSortStep[])
+      console.log(steps.length)
+
+      setIsPlaying(true)
+      let i = 0
+
+      const interval = setInterval(() => {
+        if (i >= response.length) {
+          clearInterval(interval)
+          setIsPlaying(false)
+          return
+        }
+        setCurrentStepIndex(i)
+        i++
+      }, 500)
+    } catch (err) {
+      console.error('Errore durante la visualizzazione:', err)
     }
-
-    setSteps(response.data as SelectionSortStep[]);
-
-    setIsPlaying(true)
-    let i = 0
-
-    const interval = setInterval(() => {
-      if (i >= steps.length) {
-        clearInterval(interval)
-        setIsPlaying(false)
-        return
-      }
-      setCurrentStepIndex(i)
-      i++
-    }, 500)
   }
   
   return (
