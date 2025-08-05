@@ -30,7 +30,7 @@ restart: stop build start
 
 .PHONY: start-local-api
 start-local-api:
-	@cd backend/core && poetry run uvicorn main:app --reload
+	@cd backend && poetry run uvicorn core.main:app --reload
 
 .PHONY: start-local-frontend
 start-local-frontend:
