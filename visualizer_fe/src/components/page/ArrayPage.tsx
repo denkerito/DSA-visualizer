@@ -18,7 +18,7 @@ function ArrayPage() {
   }) as ApiResponse<ArrayData>;
   
   const [chooseAlgo, setChooseAlgo] = useState('');
-  const [steps, setSteps] = useState<Step[]>([])  // array di oggetti JSON che hai incollato
+  const [steps, setSteps] = useState<Step[]>([]) 
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
 
