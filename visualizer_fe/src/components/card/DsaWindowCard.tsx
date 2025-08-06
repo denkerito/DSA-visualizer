@@ -8,13 +8,12 @@ interface DsaWindowCardProps{
 }
 
 function DsaWindowCard({children, chosen = false, onStart}: DsaWindowCardProps){
-    /*
-    const runVisualization = (chosenAlgo: string) => {
-        super.runVisualization();
-    } */
-
     return (
-        <div className="w-[69rem] h-[30rem] bg-black/70 backdrop-blur-md backdrop-brightness-110 rounded-[1.5rem] shadow-2xl flex flex-col items-center justify-between p-6">
+        <div className="w-[69rem] h-[30rem] bg-[#242832] rounded-[1.5rem] shadow-2xl flex flex-col items-center justify-between p-6"
+        style={{
+            backgroundImage: "linear-gradient(139deg, #242832 0%, #241c28 100%)"
+        }}
+        >
             <div></div>
 
             <div className="flex-1 flex items-center justify-center">

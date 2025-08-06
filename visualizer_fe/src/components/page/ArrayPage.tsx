@@ -5,6 +5,7 @@ import useApiCall from "../../logic_application/ApiCall";
 import { useEffect, useState } from "react";
 
 import type { ApiResponse,AlgorithmsData, ArrayData, Step, SelectionSortStep }  from "../../logic_application/ApiResponseSchema"
+import OperationCard from "../card/OperationCard";
 
 function ArrayPage() {
 
@@ -79,8 +80,11 @@ function ArrayPage() {
             ))}
           </div>  
         </DsaWindowCard>
-        <AlgoChoser  algorithms= {!algorithms.error && algorithms.data ? (algorithms.data as AlgorithmsData).algorithms : [] } 
-          setChooseAlgo={setChooseAlgo}/>
+        <div className="flex flex-col items-center justify-start pt-[2rem] space-y-[4rem]">
+          <AlgoChoser  algorithms= {!algorithms.error && algorithms.data ? (algorithms.data as AlgorithmsData).algorithms : [] } 
+            setChooseAlgo={setChooseAlgo}/>
+          <OperationCard operations={["add"]} />
+        </div>
       </div>
     </div>
   );
