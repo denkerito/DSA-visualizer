@@ -4,7 +4,8 @@ import Square  from "../data_structure/Square";
 import useApiCall from "../../logic_application/ApiCall";
 import { useEffect, useState } from "react";
 
-import type { ApiResponse,AlgorithmsData, ArrayData, Step, SelectionSortStep }  from "../../logic_application/ApiResponseSchema"
+import type { ApiResponse,AlgorithmsData, ArrayData }  from "../../schemas/ApiResponseSchema"
+import type { Step, SelectionSortStep, BubbleSortStep } from "../../schemas/SortingAlgorithmsSchema"
 import OperationCard from "../card/OperationCard";
 
 function ArrayPage() {
@@ -41,12 +42,18 @@ function ArrayPage() {
     }
   }, [currentStepIndex, steps]);
 
+
   const startVisualization = async () => {
     try {
       const res = await fetch(`http://127.0.0.1:8000/api/v1/arrays/${chooseAlgo}`)
       const response = await res.json()
       
-      setSteps(response as SelectionSortStep[])
+      if(chooseAlgo === "selection_sort"){
+        setSteps(response as SelectionSortStep[])
+      }
+      if(chooseAlgo === "bubble_sort"){
+        setSteps(response as BubbleSortStep[])
+      }
 
       setIsPlaying(true)
       let i = 0
@@ -65,8 +72,19 @@ function ArrayPage() {
     }
   }
   
+  /*
+  possibol color for external div
+  - #1e1f24
+  - #1a1c23
+  - #121318
+  - bg-gradient-to-br from-[#1a1c23] to-[#121318]
+  - #0f0f11
+  - #1a1e26
+  - radial-gradient(ellipse at center, #1f232b 0%, #161922 100%)
+  - linear-gradient(135deg, #1a1e26 0%, #151821 100%)
+  */
   return (
-    <div className="w-full min-h-screen bg-gray-950 ">
+    <div className="w-full min-h-screen bg-gradient-to-br from-[#1a1c23] to-[#121318]">
       <div className="p-10 h-screen flex flex-row space-x-12">
         <DsaWindowCard chosen = {chooseAlgo ? true : false} onStart={startVisualization}>
           <div className="w-full h-full flex flex-row items-center justify-center">
@@ -80,7 +98,7 @@ function ArrayPage() {
             ))}
           </div>  
         </DsaWindowCard>
-        <div className="flex flex-col items-center justify-start pt-[2rem] space-y-[4rem]">
+        <div className="flex flex-col items-center justify-start pt-[2rem] space-y-[4rem] text-[#C8C6C6] transition-all duration-300 ease-out">
           <AlgoChoser  algorithms= {!algorithms.error && algorithms.data ? (algorithms.data as AlgorithmsData).algorithms : [] } 
             setChooseAlgo={setChooseAlgo}/>
           <OperationCard operations={["add"]} />

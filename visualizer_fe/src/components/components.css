@@ -1,1 +1,10 @@
+@font-face {
+    font-family: Roboto;
+    src: url('../assets/fonts/RobotoMono-SemiBold.ttf');
+}
+
 @import "tailwindcss";
+
+@theme{
+    --font-roboto: Roboto, "sans-serif";
+}

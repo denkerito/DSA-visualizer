@@ -1,0 +1,8 @@
+<svg viewBox="0 0 180 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="6px">
+  <!-- Cella 1 -->
+  <rect x="0" y="0" width="60" height="60" rx="10" ry="10"/>
+  <!-- Cella 2 -->
+  <rect x="60" y="0" width="60" height="60" rx="10" ry="10"/>
+  <!-- Cella 3 -->
+  <rect x="120" y="0" width="60" height="60" rx="10" ry="10"/>
+</svg>

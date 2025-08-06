@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class TypeOfOperation(Enum):
     COMPARISON = "comparison"
     SUCCESS_COMPARISON= "successComparison"
+    FAILURE_COMPARISON="failureComparison"
     SWAP = "swap"
 
 
@@ -27,4 +28,8 @@ class SelectionSortStepOutputModel(ArraySortingStepBaseOutputModel):
 
 class BubbleSortStepOutputModel(ArraySortingStepBaseOutputModel):
     next_index: int
+    ordered_index: int
+
+class InsertionSortStepOutputModel(ArraySortingStepBaseOutputModel):
+    swap_index: int
     ordered_index: int

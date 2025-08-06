@@ -1,5 +1,6 @@
 from core.schemas.input_model import ArrayBaseOperationInputModel, ArraySortingInputModel
-from core.schemas.output_model import AlgorithmsOutputModel, ArrayOutputModel, BubbleSortStepOutputModel, SelectionSortStepOutputModel, TypeOfOperation
+from core.schemas.output_model import AlgorithmsOutputModel, ArrayOutputModel, BubbleSortStepOutputModel, SelectionSortStepOutputModel, \
+      TypeOfOperation, InsertionSortStepOutputModel
 from fastapi import APIRouter, HTTPException
 from fastapi import status
 import numpy as np
@@ -48,15 +49,42 @@ async def remove_element(field: ArrayBaseOperationInputModel):
 # Algorithms
 @router.get("/insertion_sort")
 async def insertion_sort(field: ArraySortingInputModel):
-    ...
-    
-
-@router.get("/selection_sort")
-async def selection_sort():
     array_copy= array.copy()
     if not array_copy:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The array passed can't be null")
     steps= []
+    n=len(array_copy)
+    for i in range(1, len(array_copy)):
+        key = array_copy[i]
+        j = i - 1
+        steps.append(InsertionSortStepOutputModel(
+            current_array=array_copy,
+            current_index=i, #key index
+            type_of_operation=TypeOfOperation.COMPARISON,
+            ordered_index=i-1,
+            swap_index=-1  # No swap yet, so we set it to -1 initially
+        ))
+        while j >= 0 and key < array_copy[j]:
+            array_copy[j + 1] = array_copy[j]
+            j -= 1
+        array_copy[j + 1] = key
+        steps.append(InsertionSortStepOutputModel(
+            current_array=array_copy,
+            current_index=i, #key index
+            type_of_operation=TypeOfOperation.SWAP,
+            ordered_index=i-1,
+            swap_index=j+1
+        ))
+    return steps
+    
+
+@router.get("/selection_sort")
+async def selection_sort():
+    
+    if not array:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The array passed can't be null")
+    steps= []
+    array_copy= array.copy()
     n=len(array_copy)
     for i in range(n):
         min_idx = i
@@ -96,38 +124,41 @@ async def bubble_sort():
     if not array:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="The array passed can't be null")
     steps= []
-    n = len(array)
+    array_copy= array.copy()
+    n = len(array_copy)
     for i in range(n):
-        swapped = False
-
         for j in range(0, n-i-1):
             steps.append(BubbleSortStepOutputModel(
-                current_array= array,
+                current_array= array_copy,
                 next_index = j + 1,  # fix_value in this context is the next index to compare (maybe we can change this later or use a different model)
-                current_value=j,
+                current_index=j,
                 type_of_operation =TypeOfOperation.COMPARISON,
                 ordered_index= n - i
             ))
-            if array[j] > array[j+1]:
+            if array_copy[j] > array_copy[j+1]:
                 steps.append(BubbleSortStepOutputModel(
-                    current_array= array,
+                    current_array= array_copy,
                     next_index = j + 1,
-                    current_value=j,
+                    current_index=j,
                     type_of_operation =TypeOfOperation.SUCCESS_COMPARISON,
                     ordered_index= n - i
                 ))
-                array[j], array[j+1] = array[j+1], array[j]
-                swapped = True
+                array_copy[j], array_copy[j+1] = array_copy[j+1], array_copy[j]
                 steps.append(BubbleSortStepOutputModel(
-                    current_array= array,
+                    current_array= array_copy,
                     next_index = j + 1,
-                    current_value = j,
+                    current_index = j,
                     type_of_operation = TypeOfOperation.SWAP,
                     ordered_index= n - i
                 ))
-        # No swaps means the array is sorted        
-        if (swapped == False):
-            break
+            else:
+                steps.append(BubbleSortStepOutputModel(
+                    current_array= array_copy,
+                    next_index = j + 1,
+                    current_index=j,
+                    type_of_operation =TypeOfOperation.FAILURE_COMPARISON,
+                    ordered_index= n - i
+                ))
     # We can possibly add a final step to indicate the array is sorted TypeOfOperation.sorted, or just manage it in the frontendz
     return steps        
         
